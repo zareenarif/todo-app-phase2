@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(sp.specify)",
+      "Bash(git fetch:*)",
+      "Bash(pwsh:*)",
+      "Skill(sp.plan)",
+      "Bash(powershell.exe -File .specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "Bash(powershell.exe -File .specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)",
+      "Skill(sp.tasks)",
+      "Bash(powershell.exe -File:*)",
+      "Skill(sp.implement)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)"
+    ]
+  }
+}
