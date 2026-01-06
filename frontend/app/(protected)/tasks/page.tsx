@@ -11,6 +11,8 @@ import TaskList from '@/components/tasks/TaskList';
 import TaskForm from '@/components/tasks/TaskForm';
 import { Task } from '@/lib/types';
 
+import AppLayout from '@/components/layout/AppLayout';
+
 export default function TasksPage() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -36,6 +38,7 @@ export default function TasksPage() {
 
   return (
     <AuthGuard>
+      <AppLayout>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Page Header */}
@@ -184,11 +187,12 @@ export default function TasksPage() {
           </div>
 
           {/* Task List */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <TaskList filters={filters} refreshTrigger={refreshTrigger} />
           </div>
         </div>
       </div>
+      </AppLayout>
     </AuthGuard>
   );
 }

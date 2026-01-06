@@ -8,6 +8,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AuthGuard from '@/components/auth/AuthGuard';
+import AppLayout from '@/components/layout/AppLayout';
 import { listTasks } from '@/lib/api';
 import { Task } from '@/lib/types';
 
@@ -41,6 +42,7 @@ export default function DashboardPage() {
 
   return (
     <AuthGuard>
+      <AppLayout>
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Welcome Header */}
@@ -226,6 +228,7 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+      </AppLayout>
     </AuthGuard>
   );
 }

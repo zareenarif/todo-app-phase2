@@ -111,37 +111,57 @@ export default function TaskCard({ task, onTaskUpdated }: TaskCardProps) {
 
   // View mode
   return (
-    <div className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-200 p-6 border-l-4 ${
-      task.completed
-        ? 'border-green-500 bg-gradient-to-r from-green-50 to-white'
-        : isOverdue
-        ? 'border-red-500 bg-gradient-to-r from-red-50 to-white'
-        : 'border-indigo-500 bg-white hover:border-indigo-600'
+    <div className={`group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden animate-fade-in-up ${
+      task.completed ? 'opacity-75' : ''
     }`}>
-      <div className="flex items-start gap-3">
-        {/* Completion status checkbox */}
+      {/* Gradient accent bar */}
+      <div className={`absolute top-0 left-0 right-0 h-1 ${
+        task.completed
+          ? 'bg-gradient-to-r from-green-400 to-emerald-500'
+          : isOverdue
+          ? 'bg-gradient-to-r from-red-400 to-pink-500'
+          : 'bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500'
+      }`} />
+
+      {/* Hover glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-indigo-500/5 group-hover:via-purple-500/5 group-hover:to-pink-500/5 transition-all duration-300 rounded-2xl" />
+      <div className="relative flex items-start gap-4">
+        {/* Completion status checkbox - Premium style */}
         <div className="flex-shrink-0 pt-1">
-          <input
-            type="checkbox"
-            checked={task.completed}
-            onChange={handleToggleCompletion}
-            disabled={isTogglingCompletion}
-            className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          />
+          <label className="relative inline-flex items-center cursor-pointer group/checkbox">
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={handleToggleCompletion}
+              disabled={isTogglingCompletion}
+              className="sr-only peer"
+            />
+            <div className={`w-6 h-6 rounded-lg border-2 transition-all duration-200 flex items-center justify-center ${
+              task.completed
+                ? 'bg-gradient-to-br from-green-400 to-emerald-500 border-green-500 scale-110'
+                : 'bg-white border-gray-300 group-hover/checkbox:border-indigo-400 group-hover/checkbox:scale-110'
+            } ${isTogglingCompletion ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              {task.completed && (
+                <svg className="w-4 h-4 text-white animate-scale-in" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+          </label>
         </div>
 
         {/* Task content */}
         <div className="flex-grow min-w-0">
           {/* Title */}
-          <h3 className={`text-xl font-bold ${
-            task.completed ? 'text-gray-400 line-through' : 'text-gray-900'
+          <h3 className={`text-lg font-bold transition-all ${
+            task.completed ? 'text-gray-400 line-through' : 'text-gray-900 group-hover:text-indigo-600'
           }`}>
             {task.title}
           </h3>
 
           {/* Description */}
           {task.description && (
-            <p className={`mt-1 text-sm ${
+            <p className={`mt-2 text-sm leading-relaxed ${
               task.completed ? 'text-gray-400' : 'text-gray-600'
             }`}>
               {task.description}
@@ -149,12 +169,19 @@ export default function TaskCard({ task, onTaskUpdated }: TaskCardProps) {
           )}
 
           {/* Metadata: Priority, Tags, Due Date */}
-          <div className="mt-3 flex flex-wrap gap-2 items-center">
+          <div className="mt-4 flex flex-wrap gap-2 items-center">
             {/* Priority badge */}
             {task.priority && (
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                priorityColors[task.priority]
+              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold shadow-sm ${
+                task.priority === PriorityEnum.HIGH
+                  ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white'
+                  : task.priority === PriorityEnum.MEDIUM
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white'
+                  : 'bg-gradient-to-r from-green-400 to-emerald-400 text-white'
               }`}>
+                {task.priority === PriorityEnum.HIGH && '🔴'}
+                {task.priority === PriorityEnum.MEDIUM && '🟡'}
+                {task.priority === PriorityEnum.LOW && '🟢'}
                 {task.priority.toUpperCase()}
               </span>
             )}
@@ -163,53 +190,59 @@ export default function TaskCard({ task, onTaskUpdated }: TaskCardProps) {
             {task.tags && task.tags.length > 0 && task.tags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 border border-indigo-200"
               >
-                {tag}
+                🏷️ {tag}
               </span>
             ))}
 
             {/* Due date */}
             {task.due_date && (
-              <span className={`inline-flex items-center text-xs ${
+              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold ${
                 isOverdue
-                  ? 'text-red-600 font-semibold'
+                  ? 'bg-red-50 text-red-600 border border-red-200'
                   : task.completed
-                  ? 'text-gray-400'
-                  : 'text-gray-500'
+                  ? 'bg-gray-50 text-gray-400 border border-gray-200'
+                  : 'bg-blue-50 text-blue-600 border border-blue-200'
               }`}>
                 📅 {formatDate(task.due_date)}
-                {isOverdue && ' (Overdue)'}
+                {isOverdue && <span className="text-red-700 font-bold">⚠️</span>}
               </span>
             )}
 
             {/* Recurrence indicator */}
             {task.recurrence && (
-              <span className="inline-flex items-center text-xs text-gray-500">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-600 border border-purple-200">
                 🔄 {task.recurrence}
               </span>
             )}
           </div>
 
           {/* Timestamps */}
-          <div className="mt-2 text-xs text-gray-400">
-            Created {new Date(task.created_at).toLocaleDateString()}
+          <div className="mt-3 text-xs text-gray-400 flex items-center gap-2">
+            <span>Created {new Date(task.created_at).toLocaleDateString()}</span>
           </div>
         </div>
 
-        {/* Action buttons */}
+        {/* Action buttons - Premium style */}
         <div className="flex-shrink-0 flex gap-2">
           <button
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 text-sm font-bold text-indigo-600 hover:text-white hover:bg-indigo-600 rounded-lg transition-all duration-200 border-2 border-indigo-600"
+            className="group/btn relative px-4 py-2 text-sm font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-600 hover:text-white rounded-xl transition-all duration-200 border border-indigo-200 hover:shadow-lg hover:scale-105"
           >
-            ✏️ Edit
+            <span className="flex items-center gap-2">
+              ✏️
+              <span className="hidden sm:inline">Edit</span>
+            </span>
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="px-4 py-2 text-sm font-bold text-red-600 hover:text-white hover:bg-red-600 rounded-lg transition-all duration-200 border-2 border-red-600"
+            className="group/btn relative px-4 py-2 text-sm font-bold text-red-600 bg-red-50 hover:bg-red-600 hover:text-white rounded-xl transition-all duration-200 border border-red-200 hover:shadow-lg hover:scale-105"
           >
-            🗑️ Delete
+            <span className="flex items-center gap-2">
+              🗑️
+              <span className="hidden sm:inline">Delete</span>
+            </span>
           </button>
         </div>
       </div>
