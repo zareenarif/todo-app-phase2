@@ -4,7 +4,6 @@ Task API endpoints - CRUD operations for tasks.
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlmodel import Session, select, col
 from typing import List, Optional
-from uuid import UUID
 from datetime import datetime
 from src.core.database import get_session
 from src.api.deps import get_current_user
@@ -36,7 +35,7 @@ async def list_tasks(
     Returns list of tasks owned by the authenticated user.
     """
     # Base query: filter by user_id for data isolation
-    query = select(Task).where(Task.user_id == UUID(current_user_id))
+    query = select(Task).where(Task.user_id == current_user_id)
 
     # Apply filters
     if status is not None:
@@ -71,7 +70,7 @@ async def list_tasks(
 
 @router.get("/{task_id}", response_model=TaskResponse)
 async def get_task(
-    task_id: UUID,
+    task_id: str,
     session: Session = Depends(get_session),
     current_user_id: str = Depends(get_current_user),
 ) -> Task:
@@ -127,7 +126,7 @@ async def create_task(
     """
     # Create Task model instance with user_id from JWT
     new_task = Task(
-        user_id=UUID(current_user_id),
+        user_id=current_user_id,
         title=task_data.title,
         description=task_data.description,
         priority=task_data.priority,
@@ -146,7 +145,7 @@ async def create_task(
 
 @router.put("/{task_id}", response_model=TaskResponse)
 async def update_task(
-    task_id: UUID,
+    task_id: str,
     task_data: TaskUpdate,
     session: Session = Depends(get_session),
     current_user_id: str = Depends(get_current_user),
@@ -202,7 +201,7 @@ async def update_task(
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_task(
-    task_id: UUID,
+    task_id: str,
     session: Session = Depends(get_session),
     current_user_id: str = Depends(get_current_user),
 ) -> None:
@@ -245,7 +244,7 @@ async def delete_task(
 
 @router.patch("/{task_id}/complete", response_model=TaskResponse)
 async def toggle_task_completion(
-    task_id: UUID,
+    task_id: str,
     session: Session = Depends(get_session),
     current_user_id: str = Depends(get_current_user),
 ) -> Task:

@@ -49,3 +49,67 @@ export interface TaskUpdate {
 export interface ErrorResponse {
   detail: string;
 }
+
+// Agent Types
+export enum AgentTypeEnum {
+  PRIORITIZER = 'prioritizer',
+  DECOMPOSER = 'decomposer',
+  SCHEDULER = 'scheduler',
+  REMINDER = 'reminder',
+  CHAT = 'chat',
+}
+
+export interface AgentMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  status?: 'pending' | 'completed' | 'error';
+}
+
+export interface PriorityRecommendation {
+  task_id: string;
+  priority: 'high' | 'medium' | 'low';
+  reason: string;
+}
+
+export interface SubtaskRecommendation {
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  effort: 'small' | 'medium' | 'large';
+}
+
+export interface PrioritizeResponse {
+  success: boolean;
+  priorities: PriorityRecommendation[];
+  message: string;
+}
+
+export interface DecomposeResponse {
+  success: boolean;
+  parent_task_id: string;
+  subtasks: SubtaskRecommendation[];
+  message: string;
+}
+
+export interface ChatResponse {
+  success: boolean;
+  message: string;
+  agent_type: AgentTypeEnum;
+}
+
+export interface AgentLog {
+  id: string;
+  agent_type: string;
+  status: string;
+  input_summary: string;
+  output_summary: string;
+  execution_time_ms: number | null;
+  created_at: string;
+}
+
+export interface LLMHealthCheck {
+  primary: { status: string; provider?: string; error?: string };
+  fallback: { status: string; provider?: string; error?: string };
+}

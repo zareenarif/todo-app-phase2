@@ -9,6 +9,9 @@ import { useState } from 'react';
 import { TaskCreate, PriorityEnum, RecurrenceEnum, Task } from '@/lib/types';
 import { createTask, updateTask } from '@/lib/api';
 import Toast from '../common/Toast';
+import Button from '../common/Button';
+import Input from '../common/Input';
+import Textarea from '../common/Textarea';
 
 interface TaskFormProps {
   onSuccess?: (task: Task) => void;
@@ -109,129 +112,115 @@ export default function TaskForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="rounded-xl bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 p-4">
+          <p className="text-sm text-red-800 dark:text-red-200 font-medium">{error}</p>
         </div>
       )}
 
       {/* Title */}
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-          Title <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          maxLength={200}
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          placeholder="Enter task title"
-        />
-        <p className="mt-1 text-xs text-gray-500">{title.length}/200 characters</p>
-      </div>
+      <Input
+        id="title"
+        name="title"
+        type="text"
+        label="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        maxLength={200}
+        required
+        placeholder="Enter task title"
+      />
 
       {/* Description */}
-      <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-          Description
-        </label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          maxLength={2000}
-          rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
-          placeholder="Enter task description (optional)"
-        />
-        <p className="mt-1 text-xs text-gray-500">{description.length}/2000 characters</p>
-      </div>
+      <Textarea
+        id="description"
+        name="description"
+        label="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        maxLength={2000}
+        rows={4}
+        placeholder="Enter task description (optional)"
+      />
 
       {/* Priority */}
       <div>
-        <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="priority" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
           Priority
         </label>
         <select
           id="priority"
           value={priority}
           onChange={(e) => setPriority(e.target.value as PriorityEnum | '')}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          className="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px] focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200"
         >
-          <option value="">None</option>
-          <option value={PriorityEnum.HIGH}>High</option>
-          <option value={PriorityEnum.MEDIUM}>Medium</option>
-          <option value={PriorityEnum.LOW}>Low</option>
+          <option value="">Select priority...</option>
+          <option value={PriorityEnum.HIGH}>🔴 High</option>
+          <option value={PriorityEnum.MEDIUM}>🟡 Medium</option>
+          <option value={PriorityEnum.LOW}>🟢 Low</option>
         </select>
       </div>
 
       {/* Tags */}
-      <div>
-        <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
-          Tags
-        </label>
-        <input
-          type="text"
-          id="tags"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          placeholder="work, urgent, personal (comma-separated)"
-        />
-        <p className="mt-1 text-xs text-gray-500">Separate tags with commas</p>
-      </div>
+      <Input
+        id="tags"
+        name="tags"
+        type="text"
+        label="Tags"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        placeholder="work, urgent, personal (comma-separated)"
+        helperText="Separate tags with commas"
+      />
 
       {/* Due Date */}
-      <div>
-        <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
-          Due Date
-        </label>
-        <input
-          type="date"
-          id="dueDate"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        />
-      </div>
+      <Input
+        id="dueDate"
+        name="dueDate"
+        type="date"
+        label="Due Date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+      />
 
       {/* Recurrence */}
       <div>
-        <label htmlFor="recurrence" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="recurrence" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
           Recurrence
         </label>
         <select
           id="recurrence"
           value={recurrence}
           onChange={(e) => setRecurrence(e.target.value as RecurrenceEnum | '')}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          className="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[48px] focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200"
         >
-          <option value="">None</option>
-          <option value={RecurrenceEnum.DAILY}>Daily</option>
-          <option value={RecurrenceEnum.WEEKLY}>Weekly</option>
-          <option value={RecurrenceEnum.MONTHLY}>Monthly</option>
+          <option value="">No recurrence</option>
+          <option value={RecurrenceEnum.DAILY}>🔄 Daily</option>
+          <option value={RecurrenceEnum.WEEKLY}>📅 Weekly</option>
+          <option value={RecurrenceEnum.MONTHLY}>📆 Monthly</option>
         </select>
       </div>
 
       {/* Form Actions */}
       <div className="flex gap-3 pt-4">
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          size="lg"
+          fullWidth
+          loading={loading}
           disabled={loading}
-          className="flex-1 px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? (mode === 'create' ? 'Creating...' : 'Saving...') : (mode === 'create' ? 'Create Task' : 'Save Changes')}
-        </button>
+          {mode === 'create' ? 'Create Task' : 'Save Changes'}
+        </Button>
         {onCancel && (
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
             Cancel
-          </button>
+          </Button>
         )}
       </div>
 

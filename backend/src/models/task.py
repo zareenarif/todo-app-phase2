@@ -4,9 +4,14 @@ Task data model.
 from sqlmodel import Field, SQLModel, Column
 from sqlalchemy import String, JSON, ForeignKey
 from datetime import datetime, date
-from uuid import UUID, uuid4
+from uuid import uuid4
 from typing import Optional, List
 from enum import Enum
+
+
+def generate_uuid() -> str:
+    """Generate a UUID string for SQLite compatibility."""
+    return str(uuid4())
 
 
 class PriorityEnum(str, Enum):
@@ -42,11 +47,11 @@ class Task(SQLModel, table=True):
     """
     __tablename__ = "tasks"
 
-    id: UUID = Field(
-        default_factory=uuid4,
+    id: str = Field(
+        default_factory=generate_uuid,
         sa_column=Column(String(36), primary_key=True)
     )
-    user_id: UUID = Field(
+    user_id: str = Field(
         sa_column=Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
     )
     title: str = Field(max_length=200, nullable=False)

@@ -21,6 +21,19 @@ class Settings(BaseSettings):
     # Optional
     DEBUG: bool = False
 
+    # LLM Configuration (Groq - free tier)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.1-70b-versatile"
+
+    # Ollama Configuration (local fallback)
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3"
+
+    # Agent Configuration
+    LLM_PROVIDER: str = "groq"  # "groq" or "ollama"
+    LLM_TEMPERATURE: float = 0.7
+    LLM_MAX_TOKENS: int = 1024
+
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS_ORIGINS string into list."""

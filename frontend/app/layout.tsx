@@ -1,11 +1,7 @@
-/**
- * Root layout - wraps all pages in the application.
- * Includes global styles and metadata.
- */
-
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,9 +16,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main>{children}</main>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen w-full overflow-x-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
+        <ThemeProvider>
+          <main className="relative min-h-screen w-full">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

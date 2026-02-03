@@ -17,13 +17,11 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # Add password_hash column to users table
-    op.add_column('users', sa.Column('password_hash', sa.String(), nullable=False, server_default=''))
-
-    # Remove server default after column is created
-    op.alter_column('users', 'password_hash', server_default=None)
+    # password_hash is now included in initial migration
+    # This migration is kept for version history but does nothing
+    pass
 
 
 def downgrade() -> None:
-    # Remove password_hash column from users table
-    op.drop_column('users', 'password_hash')
+    # No-op - password_hash is now in initial migration
+    pass

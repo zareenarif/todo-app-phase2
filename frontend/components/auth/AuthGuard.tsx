@@ -16,21 +16,30 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     // Check if user has JWT token
-    // In actual implementation, this would verify with Better Auth
     const checkAuth = () => {
+      // Ensure we're in browser environment
+      if (typeof window === 'undefined') {
+        return;
+      }
+
       const token = localStorage.getItem('jwt_token');
+      console.log('[AuthGuard] Checking auth, token exists:', !!token);
 
       if (!token) {
         // No token, redirect to login
+        console.log('[AuthGuard] No token found, redirecting to login');
+        setIsRedirecting(true);
+        setIsLoading(false);
         router.push('/login');
         return;
       }
 
-      // TODO: In actual implementation, verify token with backend
-      // For now, we just check if token exists
+      // Token exists - user is authenticated
+      console.log('[AuthGuard] Token found, user authenticated');
       setIsAuthenticated(true);
       setIsLoading(false);
     };
@@ -41,16 +50,27 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   // Show loading state while checking authentication
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="w-10 h-10 border-2 border-gray-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-3 dark:border-gray-700"></div>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
     );
   }
 
-  // If not authenticated, don't render children (redirect happens in useEffect)
+  // If redirecting, show a brief message
+  if (isRedirecting) {
+    return (
+      <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If not authenticated and not redirecting, show nothing
   if (!isAuthenticated) {
     return null;
   }
