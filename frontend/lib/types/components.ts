@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 // DataTable Types
 export interface Column<T> {
@@ -38,41 +38,49 @@ export interface ModalProps {
 }
 
 // Button Types
-export interface ButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
   fullWidth?: boolean;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   className?: string;
 }
 
 // Input Types
-export interface InputProps {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
   required?: boolean;
+  leftAddon?: ReactNode;
+  rightAddon?: ReactNode;
+  inputSize?: 'sm' | 'md' | 'lg';
 }
 
 // Card Types
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
+  variant?: 'elevated' | 'outlined' | 'filled';
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  interactive?: boolean;
   hover?: boolean;
 }
 
 export interface CardHeaderProps {
-  children: ReactNode;
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
   className?: string;
 }
 
 export interface CardFooterProps {
   children: ReactNode;
+  align?: 'left' | 'center' | 'right' | 'between';
   className?: string;
 }
 
@@ -92,13 +100,14 @@ export interface StatsCardProps {
   value: string | number;
   icon?: ReactNode;
   iconGradient?: { from: string; to: string };
-  trend?: { value: number; isPositive: boolean };
+  trend?: { value: number; direction: 'up' | 'down' | 'neutral' };
   footer?: ReactNode;
   className?: string;
 }
 
 // Navigation Types
 export interface NavItem {
+  key: string;
   label: string;
   href: string;
   icon?: ReactNode;
@@ -108,69 +117,83 @@ export interface NavItem {
 
 // Landing Page Types
 export interface HeroProps {
-  title?: string;
-  subtitle?: string;
-  ctaText?: string;
-  ctaHref?: string;
+  headline: string;
+  subheadline?: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  image?: ReactNode;
+  variant?: 'centered' | 'split' | 'image-right';
 }
 
 export interface FeaturesProps {
-  features?: Array<{
+  headline?: string;
+  subheadline?: string;
+  features: Array<{
     title: string;
     description: string;
     icon?: ReactNode;
   }>;
+  columns?: 2 | 3 | 4;
 }
 
 export interface PricingProps {
-  plans?: Array<{
+  headline?: string;
+  tiers: Array<{
     name: string;
     price: string;
+    period?: string;
+    description?: string;
     features: string[];
     highlighted?: boolean;
+    cta: { label: string; href: string };
   }>;
 }
 
 export interface TestimonialsProps {
-  testimonials?: Array<{
-    content: string;
+  headline?: string;
+  testimonials: Array<{
+    quote: string;
     author: string;
     role?: string;
+    company?: string;
     avatar?: string;
   }>;
+  variant?: 'grid' | 'carousel';
 }
 
 export interface FooterProps {
+  logo?: ReactNode;
+  description?: string;
+  links?: Array<{
+    title: string;
+    items: Array<{ label: string; href: string }>;
+  }>;
+  social?: Array<{ href: string; label: string; icon: ReactNode }>;
+  copyright?: string;
   className?: string;
 }
 
 // Form Types
-export interface CheckboxProps {
-  checked?: boolean;
-  onChange?: (checked: boolean) => void;
+export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
-  disabled?: boolean;
+  indeterminate?: boolean;
+  checkboxSize?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export interface SelectProps {
-  options: Array<{ value: string; label: string }>;
-  value?: string;
-  onChange?: (value: string) => void;
+export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
+  options: Array<{ value: string; label: string; disabled?: boolean }>;
   placeholder?: string;
   label?: string;
   error?: string;
-  disabled?: boolean;
+  selectSize?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export interface TextareaProps {
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  placeholder?: string;
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  helperText?: string;
   error?: string;
-  rows?: number;
-  disabled?: boolean;
+  autoResize?: boolean;
   className?: string;
 }
