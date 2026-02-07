@@ -6,50 +6,23 @@ interface LogoProps {
   className?: string;
 }
 
+const sizeClasses = {
+  sm: { icon: 'h-6 w-6', text: 'text-sm' },
+  md: { icon: 'h-8 w-8', text: 'text-lg' },
+  lg: { icon: 'h-10 w-10', text: 'text-xl' },
+};
+
 export default function Logo({ size = 'md', showText = true, className = '' }: LogoProps) {
-  // Fixed pixel sizes for each variant
-  const sizeConfig = {
-    sm: 24,
-    md: 32,
-    lg: 40,
-  };
-
-  const textSize = {
-    sm: 'text-sm',
-    md: 'text-lg',
-    lg: 'text-xl',
-  };
-
-  const iconSize = sizeConfig[size];
+  const { icon, text } = sizeClasses[size];
 
   return (
-    <div
-      className={`inline-flex items-center gap-2 ${className}`}
-      style={{ maxHeight: '48px' }}
-    >
-      {/* Logo Icon - HARD CODED SIZE */}
-      <div
-        style={{
-          width: iconSize,
-          height: iconSize,
-          minWidth: iconSize,
-          maxWidth: iconSize,
-          minHeight: iconSize,
-          maxHeight: iconSize,
-          flexShrink: 0,
-        }}
-      >
+    <div className={`inline-flex items-center gap-2 ${className}`}>
+      <div className={`${icon} shrink-0`}>
         <svg
-          width={iconSize}
-          height={iconSize}
+          className="block h-full w-full"
           viewBox="0 0 40 40"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{
-            width: iconSize,
-            height: iconSize,
-            display: 'block',
-          }}
         >
           <defs>
             <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -63,10 +36,8 @@ export default function Logo({ size = 'md', showText = true, className = '' }: L
           <path d="M12 20L17 25L28 14" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
       </div>
-
-      {/* Logo Text */}
       {showText && (
-        <span className={`${textSize[size]} font-bold bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent whitespace-nowrap`}>
+        <span className={`${text} font-bold bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent whitespace-nowrap`}>
           TaskFlow
         </span>
       )}
@@ -74,20 +45,14 @@ export default function Logo({ size = 'md', showText = true, className = '' }: L
   );
 }
 
-// Compact version for sidebar/navigation
 export function LogoCompact({ className = '' }: { className?: string }) {
   return (
-    <div
-      style={{ width: 32, height: 32, minWidth: 32, maxWidth: 32, flexShrink: 0 }}
-      className={className}
-    >
+    <div className={`h-8 w-8 shrink-0 ${className}`}>
       <svg
-        width={32}
-        height={32}
+        className="block h-full w-full"
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ width: 32, height: 32, display: 'block' }}
       >
         <defs>
           <linearGradient id="logoGradientCompact" x1="0%" y1="0%" x2="100%" y2="100%">

@@ -136,107 +136,97 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════
-   BUTTONS
+   COMPONENT CLASSES (layered so utilities can override)
    ═══════════════════════════════════════════════════════ */
 
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white rounded-lg transition-all duration-200;
-  background: var(--gradient-primary);
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
-}
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white rounded-lg transition-all duration-200;
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+  }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
-}
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+  }
 
-.btn-primary:active {
-  transform: translateY(0);
-}
+  .btn-primary:active {
+    transform: translateY(0);
+  }
 
-.btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200;
-  @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700;
-  @apply hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600;
-}
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200;
+    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700;
+    @apply hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600;
+  }
 
-.btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200;
-  @apply text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800;
-}
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200;
+    @apply text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
 
-/* ═══════════════════════════════════════════════════════
-   CARDS
-   ═══════════════════════════════════════════════════════ */
+  .card {
+    @apply rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900;
+    @apply transition-all duration-300;
+  }
 
-.card {
-  @apply rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900;
-  @apply transition-all duration-300;
-}
+  .card:hover {
+    @apply border-gray-300 dark:border-gray-700;
+    box-shadow: var(--shadow-lg);
+  }
 
-.card:hover {
-  @apply border-gray-300 dark:border-gray-700;
-  box-shadow: var(--shadow-lg);
-}
+  .card-gradient {
+    @apply rounded-xl bg-white dark:bg-gray-900 overflow-hidden;
+    @apply transition-all duration-300;
+    position: relative;
+  }
 
-.card-gradient {
-  @apply rounded-xl bg-white dark:bg-gray-900 overflow-hidden;
-  @apply transition-all duration-300;
-  position: relative;
-}
+  .card-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+  }
 
-.card-gradient::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gradient-primary);
-}
+  .input {
+    @apply w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 dark:border-gray-700;
+    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white;
+    @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500;
+    @apply transition-all duration-200;
+  }
 
-/* ═══════════════════════════════════════════════════════
-   INPUTS
-   ═══════════════════════════════════════════════════════ */
+  .input:focus {
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+  }
 
-.input {
-  @apply w-full px-4 py-2.5 text-sm rounded-lg border border-gray-200 dark:border-gray-700;
-  @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white;
-  @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
-  @apply focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500;
-  @apply transition-all duration-200;
-}
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
 
-.input:focus {
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
-}
+  .badge-purple {
+    @apply bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300;
+  }
 
-/* ═══════════════════════════════════════════════════════
-   BADGES
-   ═══════════════════════════════════════════════════════ */
+  .badge-blue {
+    @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300;
+  }
 
-.badge {
-  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-}
+  .badge-green {
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300;
+  }
 
-.badge-purple {
-  @apply bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300;
-}
+  .badge-orange {
+    @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300;
+  }
 
-.badge-blue {
-  @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300;
-}
-
-.badge-green {
-  @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300;
-}
-
-.badge-orange {
-  @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300;
-}
-
-.badge-red {
-  @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300;
+  .badge-red {
+    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
